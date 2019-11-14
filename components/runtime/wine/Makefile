@@ -40,6 +40,8 @@ COMPONENT_PREP_ACTION = ( cd $(@D) && autoreconf -f --install )
 CONFIGURE_OPTIONS += AS="/usr/bin/gas"
 CONFIGURE_OPTIONS += --with-pulse
 CONFIGURE_OPTIONS += --with-oss
+CONFIGURE_OPTIONS += LDAP_CFLAGS="-I/usr/include/openldap"
+CONFIGURE_OPTIONS += GNUTLS_CFLAGS="-I/usr/include/gnutls-3"
 
 # common targets
 build:		$(BUILD_32)
@@ -59,6 +61,7 @@ REQUIRED_PACKAGES += library/glib2
 REQUIRED_PACKAGES += library/lcms2
 REQUIRED_PACKAGES += library/libgphoto2-2
 REQUIRED_PACKAGES += library/libxml2
+REQUIRED_PACKAGES += library/openldap
 REQUIRED_PACKAGES += library/zlib
 REQUIRED_PACKAGES += runtime/perl-524
 REQUIRED_PACKAGES += system/library
