@@ -1,0 +1,11 @@
+--- wine-4.20.orig/server/sock.c	2019-11-16 01:53:45.000000000 +0000
++++ wine-4.20/server/sock.c	2019-11-24 22:50:06.434388715 +0000
+@@ -219,7 +219,7 @@
+     pfd.revents = 0;
+ 
+     /* Solaris' poll() sometimes returns nothing if given a 0ms timeout here */
+-    n = poll( &pfd, 1, 1 );
++    n = poll( &pfd, 1, 1000 );
+     if ( n != 1 ) goto out; /* error or timeout */
+     if ( pfd.revents & POLLHUP )
+         ret = SOCK_SHUTDOWN_POLLHUP;

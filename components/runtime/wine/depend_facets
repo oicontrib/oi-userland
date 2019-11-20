@@ -1,0 +1,2 @@
+# Relax Dependency Constraints
+<transform depend -> default facet.version-lock.$(COMPONENT_FMRI) true >

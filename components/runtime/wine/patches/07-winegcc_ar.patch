@@ -1,0 +1,57 @@
+--- wine-5.2.orig/tools/winegcc/winegcc.c	2020-02-17 00:21:52.000000000 +0000
++++ wine-5.2/tools/winegcc/winegcc.c	2020-02-20 06:27:22.627051241 +0000
+@@ -983,6 +983,7 @@
+ {
+     strarray *lib_dirs, *files;
+     strarray *spec_args, *link_args;
++    strarray *src_args, *lib_args, *ar_args;
+     char *output_file, *output_path;
+     const char *spec_o_name, *libgcc = NULL;
+     const char *output_name, *spec_file, *lang;
+@@ -1257,17 +1258,20 @@
+             strarray_add(spec_args, strmake("-Wl,-delayload,%s", opts->delayimports->base[j]));
+     }
+ 
++    src_args = strarray_alloc();
++    lib_args = strarray_alloc();
++    ar_args  = strarray_alloc();
+     for ( j = 0; j < files->size; j++ )
+     {
+ 	const char* name = files->base[j] + 2;
+ 	switch(files->base[j][1])
+ 	{
+ 	    case 'l':
+-		strarray_add(link_args, strmake("-l%s", name));
++		strarray_add(lib_args, strmake("-l%s", name));
+ 		break;
+ 	    case 's':
+ 	    case 'o':
+-		strarray_add(link_args, name);
++		strarray_add(src_args, name);
+ 		break;
+ 	    case 'a':
+                 if (is_pe && !opts->lib_suffix && strchr(name, '/'))
+@@ -1285,17 +1289,20 @@
+ 
+                         if (ext) *ext = 0;
+                         p += 3;
+-                        strarray_add(link_args, strmake("-L%s", lib ));
+-                        strarray_add(link_args, strmake("-l%s", p ));
++                        strarray_add(lib_args, strmake("-L%s", lib ));
++                        strarray_add(lib_args, strmake("-l%s", p ));
+                         free( lib );
+                         break;
+                     }
+                     free( lib );
+                 }
+-		strarray_add(link_args, name);
++		strarray_add(ar_args, name);
+ 		break;
+ 	}
+     }
++    strarray_addall(link_args, src_args);
++    strarray_addall(link_args, ar_args);
++    strarray_addall(link_args, lib_args);
+ 
+     if (!opts->nostdlib && !is_pe)
+     {

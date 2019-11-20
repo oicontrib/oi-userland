@@ -1,0 +1,13 @@
+--- wine-5.2.orig/dlls/msvcrt/locale.c	2020-02-17 00:21:52.000000000 +0000
++++ wine-5.2/dlls/msvcrt/locale.c	2020-02-20 07:18:06.321604267 +0000
+@@ -53,6 +53,10 @@
+ #define MSVCRT_LEADBYTE  0x8000
+ #define MSVCRT_C1_DEFINED 0x200
+ 
++#ifdef sun /* gcc (OpenIndiana 6.5.0-oi-2) 6.5.0 has #define sun 1 */
++#undef sun
++#endif
++
+ static const MSVCRT_wchar_t sun[] = {'S','u','n',0};
+ static const MSVCRT_wchar_t mon[] = {'M','o','n',0};
+ static const MSVCRT_wchar_t tue[] = {'T','u','e',0};
